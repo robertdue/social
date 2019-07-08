@@ -25,22 +25,26 @@ public class PersonController {
     @Autowired
     IFriendshipRepository friendshipRepository;
 
+    /* show all persons */
     @GetMapping(value = "/persons")
     Iterable<Person> showAllPersons(Pageable pageable) {
         return personRepository.findAll(pageable);
     }
 
+    /* show person details */
     @GetMapping(value = "/persons/{id}")
     ResponseEntity<Person> showPerson(@PathVariable("id") long id) {
         return personRepository.findById(id).map(record -> ResponseEntity.ok().body(record))
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /* create person */
     @PostMapping(value = "/persons")
     Person addPerson(@PathVariable("id") long id, @RequestBody Person person) {
         return personRepository.save(person);
     }
 
+    /* update person details by id */
     @PutMapping(value = "/persons/{id}")
     ResponseEntity<Person> editPerson(@PathVariable("id") long id, @RequestBody Person person) {
         return personRepository.findById(id).map(record -> {

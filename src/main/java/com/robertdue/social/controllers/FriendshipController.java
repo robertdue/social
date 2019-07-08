@@ -27,23 +27,27 @@ public class FriendshipController {
     @Autowired
     IPersonRepository personRepository;
 
+    /* show all friendships */
     @GetMapping(value = "/friendships")
     Iterable<Friendship> showAllFriendships(Pageable pageable) {
         return friendshipRepository.findAll(pageable);
     }
 
+    /* show friendship details by its id */
     @GetMapping(value = "/friendships/{id}")
     ResponseEntity<Friendship> showFriendship(@PathVariable("id") long id) {
         return friendshipRepository.findById(id).map(record -> ResponseEntity.ok().body(record))
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    /* delete friendship by its id */
     @DeleteMapping(value = "/friendships/{id}")
     ResponseEntity<Friendship> removeFriendship(@PathVariable("id") long id) {
         friendshipRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
 
+    /* create friendship with ids of two persons */
     @PostMapping(value = "/friendships")
     ResponseEntity<Friendship> addFriendship(@PathVariable("personA") long personA,
             @RequestParam("personB") long personB) {
