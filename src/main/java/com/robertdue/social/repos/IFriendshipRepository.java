@@ -13,7 +13,7 @@ public interface IFriendshipRepository extends PagingAndSortingRepository<Friend
     @Query(value = "select f from Friendship f where personA = :person OR personB = :person")
     public List<Friendship> findFriendshipsByPerson(@Param("person") Person person);
 
-    @Query(value = "select f from Friendship f where (personA = :personA AND personB = :personB) OR personB = :personA AND personB = :personA")
+    @Query(value = "select f from Friendship f where (personA = :personA AND personB = :personB) OR (personA = :personB AND personB = :personA)")
     public List<Friendship> findFriendshipsByPersons(@Param("personA") Person personA,
             @Param("personB") Person personB);
 }

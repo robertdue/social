@@ -49,7 +49,7 @@ public class FriendshipController {
 
     /* create friendship with ids of two persons */
     @PostMapping(value = "/friendships")
-    ResponseEntity<Friendship> addFriendship(@PathVariable("personA") long personA,
+    ResponseEntity<Friendship> addFriendship(@RequestParam("personA") long personA,
             @RequestParam("personB") long personB) {
         Optional<Person> person = personRepository.findById(personA);
         Optional<Person> newFriend = personRepository.findById(personB);
