@@ -1,6 +1,10 @@
 package com.robertdue.social.controllers;
 
+import java.util.Optional;
+
+import com.robertdue.social.model.Friendship;
 import com.robertdue.social.model.Person;
+import com.robertdue.social.repos.IFriendshipRepository;
 import com.robertdue.social.repos.IPersonRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class PersonController {
     @Autowired
     IPersonRepository personRepository;
+
+    @Autowired
+    IFriendshipRepository friendshipRepository;
 
     @GetMapping(value = "/persons")
     Iterable<Person> showAllPersons(Pageable pageable) {
@@ -41,5 +48,15 @@ public class PersonController {
             Person updatedPerson = personRepository.save(record);
             return ResponseEntity.ok().body(updatedPerson);
         }).orElse(ResponseEntity.notFound().build());
+    }
+
+    /* get friendships for this person */
+    @GetMapping(value = "/persons/{id}/friendships")
+    Iterable<Friendship> showFriends(@PathVariable("id") long id) {
+        Optional<Person> person = personRepository.findById(id);
+        if (person.isPresent()) {
+            return friendshipRepository.findFriendshipsByPerson(person.get());
+        }
+        return null;
     }
 }
