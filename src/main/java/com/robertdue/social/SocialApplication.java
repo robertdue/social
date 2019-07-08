@@ -28,16 +28,22 @@ public class SocialApplication implements CommandLineRunner {
 	@Override
 	public void run(String... params) throws Exception {
 		/* create some demo data */
-		System.out.println("create some persons");
-		String[] persons = new String[] { "Philipp", "Robert", "Sarah", "Martin" };
-		Arrays.stream(persons).forEach((String element) -> {
-			personRepository.save(new Person(element));
-		});
+		long availablePersons = personRepository.count();
+		/* only if there is no data yet */
+		if (availablePersons == 0) {
+			System.out.println("create some persons");
+			String[] persons = new String[] { "Philipp", "Robert", "Sarah", "Martin" };
+			Arrays.stream(persons).forEach((String element) -> {
+				personRepository.save(new Person(element));
+			});
 
-		System.out.println("create a friendship");
-		Person philipp = personRepository.findOneByName("Philipp");
-		Person robert = personRepository.findOneByName("Robert");
-		friendshipRepository.save(new Friendship(philipp, robert));
+			System.out.println("create a friendship");
+			Person philipp = personRepository.findOneByName("Philipp");
+			Person robert = personRepository.findOneByName("Robert");
+			if (philipp != null && robert != null) {
+				friendshipRepository.save(new Friendship(philipp, robert));
+			}
+		}
 	}
 
 }
